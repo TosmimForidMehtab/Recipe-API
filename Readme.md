@@ -1,6 +1,3 @@
-## Running the project
+## Deployed at:
 
--   `pip install -r requirements.txt`
--   `make` or `MinGW32-make`
-
-> Go to `127.0.0.1:8000/api/docs` for documentation
+> Go to `https://short-libbie-johnhowardtest-5f28dbb8.koyeb.app/api/docs/` for documentation
