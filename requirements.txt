@@ -18,3 +18,4 @@ typing_extensions==4.13.1
 tzdata==2025.2
 uritemplate==4.1.1
 gunicorn==23.0.0
+legacy-cgi==2.6.3
