@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dotenv
 
 load_dotenv()
 
@@ -27,9 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-c!zge4p=7oryx!kf13%m--a&9g7p*o8wr7ij)a3s#-8eg5sp19"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("MODE") == "dev" or os.getenv("MODE") == "test"
 
-ALLOWED_HOSTS = ["short-libbie-johnhowardtest-5f28dbb8.koyeb.app"]
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(
+    ","
+)
 
 
 # Application definition
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -131,12 +135,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = "/static/static/"
-MEDIA_URL = "/static/media/"
+if os.environ.get("MODE") == "dev":
+    STATIC_URL = "/static/static/"
+    MEDIA_URL = "/static/media/"
 
-STATIC_ROOT = "/vol/web/static"
-MEDIA_ROOT = "/vol/web/media"
-
+    STATIC_ROOT = "/vol/web/static"
+    MEDIA_ROOT = "/vol/web/media"
+else:
+    STATIC_URL = "static/"
+    STATIC_ROOT = BASE_DIR / "staticfiles"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
